@@ -202,39 +202,48 @@ filterButtons.forEach(button => {
 
 const contactForm = document.querySelector('.contact-form');
 
-contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
-    
-    // Show success message (you can replace this with actual form submission)
-    alert('Thank you for your message! I will get back to you soon.');
-    
-    // Reset form
-    contactForm.reset();
-    
-    // You can add your own form submission logic here
-    // For example, using fetch to send to a backend API:
-    /*
-    fetch('your-api-endpoint', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert('Message sent successfully!');
-        contactForm.reset();
-    })
-    .catch(error => {
-        alert('An error occurred. Please try again.');
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(contactForm);
+        const submitButton = contactForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        
+        // Disable button and show loading state
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        
+        try {
+            // Submit to Formspree
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                alert('Thank you for your message! I will get back to you soon.');
+                contactForm.reset();
+            } else {
+                const data = await response.json();
+                if (data.errors) {
+                    alert('Oops! There was a problem: ' + data.errors.map(error => error.message).join(', '));
+                } else {
+                    alert('Oops! There was a problem submitting your form.');
+                }
+            }
+        } catch (error) {
+            alert('An error occurred. Please try again later.');
+        } finally {
+            // Re-enable button
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        }
     });
-    */
-});
+}
 
 // ===================================
 // ACTIVE NAVIGATION LINK

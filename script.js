@@ -224,11 +224,15 @@ if (contactForm) {
                 }
             });
             
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+            
             if (response.ok) {
                 alert('Thank you for your message! I will get back to you soon.');
                 contactForm.reset();
             } else {
                 const data = await response.json();
+                console.error('Error data:', data);
                 if (data.errors) {
                     alert('Oops! There was a problem: ' + data.errors.map(error => error.message).join(', '));
                 } else {
@@ -236,7 +240,8 @@ if (contactForm) {
                 }
             }
         } catch (error) {
-            alert('An error occurred. Please try again later.');
+            console.error('Submission error:', error);
+            alert('An error occurred: ' + error.message);
         } finally {
             // Re-enable button
             submitButton.disabled = false;

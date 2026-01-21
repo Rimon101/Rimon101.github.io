@@ -116,11 +116,37 @@ img {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(10px);
+    background: transparent;
+    backdrop-filter: none;
     z-index: 1000;
     padding: var(--spacing-sm) 0;
-    box-shadow: var(--shadow-md);
+    box-shadow: none;
+    transition: all var(--transition-normal);
+}
+
+.navbar.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.navbar.scrolled {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
+}
+
+.navbar.scrolled .logo a {
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.6));
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.navbar.scrolled .nav-links a {
+    text-shadow: 0 0 10px rgba(203, 213, 225, 0.3);
+    transition: all var(--transition-normal);
+}
+
+.navbar.scrolled .nav-links a:hover {
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.8), 0 0 30px rgba(236, 72, 153, 0.4);
 }
 
 .navbar .container {
@@ -199,6 +225,12 @@ img {
     position: relative;
     background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
     overflow: hidden;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.hero.fade-out {
+    opacity: 0;
+    transform: translateY(-50px);
 }
 
 .hero::before {
@@ -365,6 +397,14 @@ img {
 
 .about {
     background: var(--dark-bg);
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.about.fade-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .about-content {

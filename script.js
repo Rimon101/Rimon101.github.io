@@ -84,24 +84,33 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ===================================
-// NAVBAR BACKGROUND ON SCROLL
+// NAVBAR BACKGROUND ON SCROLL & ANIMATIONS
 // ===================================
 
 const navbar = document.querySelector('.navbar');
-let lastScroll = 0;
+const hero = document.querySelector('.hero');
+const aboutSection = document.querySelector('#about');
 
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
+    const scrollY = window.scrollY;
+    const heroHeight = hero ? hero.offsetHeight : 0;
+    const aboutPosition = aboutSection ? aboutSection.offsetTop : 0;
     
-    if (currentScroll > 100) {
-        navbar.style.background = 'rgba(15, 23, 42, 0.98)';
-        navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.3)';
+    // Add scrolled class for blur effect
+    if (scrollY > 50) {
+        navbar.classList.add('scrolled');
     } else {
-        navbar.style.background = 'rgba(15, 23, 42, 0.95)';
-        navbar.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+        navbar.classList.remove('scrolled');
     }
     
-    lastScroll = currentScroll;
+    // Hide navbar and fade out hero when approaching about section
+    if (scrollY > aboutPosition - 200) {
+        navbar.classList.add('hidden');
+        if (hero) hero.classList.add('fade-out');
+    } else {
+        navbar.classList.remove('hidden');
+        if (hero) hero.classList.remove('fade-out');
+    }
 });
 
 // ===================================
